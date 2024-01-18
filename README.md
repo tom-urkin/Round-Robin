@@ -27,7 +27,7 @@ XXX
 ### Modified rotating scheme 
 XXX
 
-###Weighted rotating scheme
+### Weighted rotating scheme
 XXX
 
 ## Support
