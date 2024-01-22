@@ -11,6 +11,7 @@ The source files  are located at the repository root:
 
 ##
 This repository containts a SystemVerilog implementation of a parametrized Round Robin arbiter with three instantiation options:
+
 TYPE=0 : Conventional rotating scheme. Pointer is increased by one after each arbitration.
 	![simplified_block](./docs/simplified_block.jpg) 
 
