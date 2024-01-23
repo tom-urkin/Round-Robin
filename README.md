@@ -24,12 +24,16 @@ TYPE=2 : Weighted rotating scheme. Winning requested is chosen based on both the
 ## Testbench
 In the following testbenches the following variables were randomized:
 
-1. XXX <br>
+1. XXX
 2. XXX
 3. XXX
 ### Conventional rotating scheme 
 	![simplified_sim](./docs/simplified_sim.jpg) 
+	
+	
 As can be seen,	
+
+
 	![simplified_sim_zoom](./docs/simplified_sim_zoom.jpg) 
 
 
