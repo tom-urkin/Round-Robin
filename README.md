@@ -43,6 +43,10 @@ Examplary events marked on the zoom-in figure:
 5) At this rising clock edge the enable signal is logic high, therefore the priority vector is modified to '6'. Since req[6] is logic high, request number 6 is granted access to the shared resouece. Please note the the grant vector did not change from its preceeding value since requester number 5 did not request access to the shared resouce.
 6) At this eising clock edge the enable signal is logic high, therefore the priority vector is modified. Please note that it's value changes from '7' to '0' for this case of N=8.
 
+Please run the testbench and observe the teminal messages for in-depth understanding, for example:
+![simplified_teminal](./docs/simplified_teminal.jpg) 
+
+
 ### Modified rotating scheme 
 XXX
 
