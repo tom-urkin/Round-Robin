@@ -28,7 +28,7 @@ In the following testbenches the following variables were randomized:
 2. XXX
 3. XXX
 ### Conventional rotating scheme 
-	![simplified_sim](./docs/simplified_sim.jpg) 
+![simplified_sim](./docs/simplified_sim.jpg) 
 	
 	
 As can be seen,	
