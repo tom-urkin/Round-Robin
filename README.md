@@ -22,7 +22,10 @@ TYPE=2 : Weighted rotating scheme. Winning requested is chosen based on both the
 
 ## Testbench
 ### Conventional rotating scheme 
-XXX
+	![simplified_sim](./docs/simplified_sim.jpg) 
+	
+	![simplified_sim_zoom](./docs/simplified_sim_zoom.jpg) 
+
 
 ### Modified rotating scheme 
 XXX
