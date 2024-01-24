@@ -15,13 +15,14 @@ input logic i_en;                                  //Arbitration takes place onl
 input logic [N-1:0] i_req;                         //Request vector
 
 //Outputs
-output logic [N-1:0] o_gnt;                        //Grant vector
+output logic [N-1:0] o_gnt;                        //Output grant vector
 
 //Internal signals
 logic [M-1:0] ptr;                                 //Round Robitn arbitration pointer
 logic [N-1:0] tmp_r, tmp_l, rotate_r;              //Temporary and internal signals used in the Rotate-Priority_Rotate scheme
 logic [N-1:0] priority_out;                        //Priority logic result
-logic [M-1:0] ptr_arb;                             //Holds the winning requester index (basically an encoding operation on o_gnt)
+logic [M-1:0] ptr_arb;                             //Holds the winning requester index (basically an encoding operation on gnt)
+logic [N-1:0] gnt;                                 //Combinatorial calculation of the grant vector (continious)
 
 //HDL body
 generate
@@ -33,13 +34,21 @@ assign {tmp_r,rotate_r} = {2{i_req}}>>ptr;
 assign priority_out = rotate_r&~(rotate_r-1);
 
 //Rotate left
-assign {o_gnt,tmp_l} = {2{priority_out}}<<ptr;
+assign {gnt,tmp_l} = {2{priority_out}}<<ptr;
 
 always @(posedge i_clk or negedge i_rstn)
-  if (!i_rstn)
+  if (!i_rstn) begin
     ptr<='0;
-  else if (i_en)
+	o_gnt<='0;                        
+	end
+  else if (i_en) begin
+    if (ptr==N-1)
+	  ptr<='0;
+	else
     ptr<=ptr+$bits(ptr)'(1);
+	
+	o_gnt<=gnt;
+  end
 end
 
 else if (TYPE==1) begin
@@ -50,19 +59,28 @@ assign {tmp_r,rotate_r} = {2{i_req}}>>ptr;
 assign priority_out = rotate_r&~(rotate_r-1);
 
 //Rotate left
-assign {o_gnt,tmp_l} = {2{priority_out}}<<ptr;
+assign {gnt,tmp_l} = {2{priority_out}}<<ptr;
 
 //ptr_next calculation
-always @(*)
-for (int i=0; i<N; i++)
-  if (o_gnt[i])
-    ptr_arb=i;
+always @(*) begin
+  ptr_arb=ptr;
+  for (int i=0; i<N; i++)
+    if (gnt[i])
+      ptr_arb=i;
+end
 
 always @(posedge i_clk or negedge i_rstn)
-  if (!i_rstn)
+  if (!i_rstn) begin
     ptr<='0;
-  else if (i_en)
-    ptr<=ptr_arb+$bits(ptr)'(1);
+	o_gnt<='0;
+  end
+  else if (i_en) begin     //Pointer cannot exceed the number of requesters !!! if N=10 it should go from 9 to 0!!! XXXX rewrite
+    if (ptr_arb==N-1)
+	  ptr<='0;
+	else
+      ptr<=ptr_arb+$bits(ptr)'(1);
+	o_gnt<=gnt;
+  end
 end
 endgenerate
 
