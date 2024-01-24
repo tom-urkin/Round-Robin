@@ -38,10 +38,10 @@ As can be seen,	when the enable signal is logic high at the rising edge of the c
 ![simplified_sim_zoom](./docs/simplified_sim_zoom.jpg) 
 
 **Examplary events marked on the zoom-in figure:**
-1) Priority pointed is not modified since the enable signal is logic low
+1) Arbitration is not carrried since the enable signal is logic low
 2) The enable signal is logic high, therefore arbitration is carried. The pointer's value is '4', however only req[1] is logic high and therefore the grant vector matched the request vector.
 3) The enable signal is logic high, therefore arbitration is carried. The pointer's value is '5' but req[5] is logic low (i.e. the requester with the instantaneous priority does not request access to the shared resource) the access is given to the next in line which is requester '6'.
-4) Priority pointed is not modified since the enable signal is logic low
+4) Arbitration is not carrried since the enable signal is logic low
 5) The enable signal is logic high, therefore arbitration is carried. The pointer's value is '6' and req[6] is logic high, therefore the requester with the instanteous priority is given access to the shared resource.
 6) Please note that the pointer value is updated to '0' for the  8-requesters scenario shown here. 
 
@@ -53,13 +53,21 @@ Please run the testbench and observe the teminal messages for in-depth understan
 ### Modified rotating scheme  (N=10)
 
 ![modified_sim](./docs/modified_sim.jpg) 
-	
-As can be seen,	when the enable signal is logic high at the rising edge of the clock a new request vector is generated and the priority pointer is modified. Since this is a standard circular realization, the 'priority' vector (marked in red) changes in a circular manner. 
+
+As can be seen,	when the enable signal is logic high at the rising edge of the clock a new request vector is generated and arbitration is carried. In this realization, the priority pointer is updated according to the arbitration outcome. Please see the block diagram above.
+
+**Examplary events marked on the zoom-in figure:**
+1) Arbitration is not carrried since the enable signal is logic low
+2) The pointer's value is '0' and req[0] is logic high. Therefore, requester '0' is granted access and the pointer is updated to '1'
+3) Arbitration is not carrried since the enable signal is logic low
+4) The pointer's value is '3' but this requester does not request access. Therefore the next in line is granted, i.e. requester number '4'. The pointer is updated to '5', i.e. the winning requester incremented by 1.
+
+Please run the testbench and observe the teminal messages for in-depth understanding using the log messages.
 
 ### Weighted rotating scheme
 XXX
 
 ## Support
 
-I will be happy to answer any questions.  
+I will be happy to answer any questions.
 Approach me here using GitHub Issues or at tom.urkin@gmail.com
