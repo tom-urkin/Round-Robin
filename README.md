@@ -44,11 +44,15 @@ Examplary events marked on the zoom-in figure:
 6) At this eising clock edge the enable signal is logic high, therefore the priority vector is modified. Please note that it's value changes from '7' to '0' for this case of N=8.
 
 Please run the testbench and observe the teminal messages for in-depth understanding, for example:
+
 ![simplified_teminal](./docs/simplified_teminal.jpg) 
 
 
-### Modified rotating scheme 
-XXX
+### Modified rotating scheme  (N=10)
+
+![modified_sim](./docs/modified_sim.jpg) 
+	
+As can be seen,	when the enable signal is logic high at the rising edge of the clock a new request vector is generated and the priority pointer is modified. Since this is a standard circular realization, the 'priority' vector (marked in red) changes in a circular manner. 
 
 ### Weighted rotating scheme
 XXX
