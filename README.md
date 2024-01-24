@@ -37,13 +37,13 @@ As can be seen,	when the enable signal is logic high at the rising edge of the c
 
 ![simplified_sim_zoom](./docs/simplified_sim_zoom.jpg) 
 
-Examplary events marked on the zoom-in figure:
+**Examplary events marked on the zoom-in figure:**
 1) Priority pointed is not modified since the enable signal is logic low
-2) At this rising clock edge the enable signal is high and the priority pointer is increased to '4'. Since the req[4] bit is logic high, the grand vector is 8'b00010000.
-3) Priority pointed is not modified since the enable signal is logic low
-4) At this rising clock edge the enable signal is logic low, therefore the priority vector is not modified. However, since it changes to logic high at this edge, a random request vector is generated which happens to be with only one logic high bit, which results in a grant vector that matches the request vector.  
-5) At this rising clock edge the enable signal is logic high, therefore the priority vector is modified to '6'. Since req[6] is logic high, request number 6 is granted access to the shared resouece. Please note the the grant vector did not change from its preceeding value since requester number 5 did not request access to the shared resouce.
-6) At this eising clock edge the enable signal is logic high, therefore the priority vector is modified. Please note that it's value changes from '7' to '0' for this case of N=8.
+2) The enable signal is logic high, therefore arbitration is carried. The pointer's value is '4', however only req[1] is logic high and therefore the grant vector matched the request vector.
+3) The enable signal is logic high, therefore arbitration is carried. The pointer's value is '5' but req[5] is logic low (i.e. the requester with the instantaneous priority does not request access to the shared resource) the access is given to the next in line which is requester '6'.
+4) Priority pointed is not modified since the enable signal is logic low
+5) The enable signal is logic high, therefore arbitration is carried. The pointer's value is '6' and req[6] is logic high, therefore the requester with the instanteous priority is given access to the shared resource.
+6) Please note that the pointer value is updated to '0' for the  8-requesters scenario shown here. 
 
 Please run the testbench and observe the teminal messages for in-depth understanding, for example:
 
