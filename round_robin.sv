@@ -39,15 +39,15 @@ assign {gnt,tmp_l} = {2{priority_out}}<<ptr;
 always @(posedge i_clk or negedge i_rstn)
   if (!i_rstn) begin
     ptr<='0;
-	o_gnt<='0;                        
-	end
+    o_gnt<='0;                        
+  end
   else if (i_en) begin
     if (ptr==N-1)
-	  ptr<='0;
-	else
+    ptr<='0;
+  else
     ptr<=ptr+$bits(ptr)'(1);
-	
-	o_gnt<=gnt;
+
+  o_gnt<=gnt;
   end
 end
 
@@ -72,14 +72,14 @@ end
 always @(posedge i_clk or negedge i_rstn)
   if (!i_rstn) begin
     ptr<='0;
-	o_gnt<='0;
+    o_gnt<='0;
   end
-  else if (i_en) begin     //Pointer cannot exceed the number of requesters !!! if N=10 it should go from 9 to 0!!! XXXX rewrite
+  else if (i_en) begin
     if (ptr_arb==N-1)
-	  ptr<='0;
-	else
+      ptr<='0;
+    else
       ptr<=ptr_arb+$bits(ptr)'(1);
-	o_gnt<=gnt;
+  o_gnt<=gnt;
   end
 end
 endgenerate
