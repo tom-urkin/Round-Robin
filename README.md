@@ -26,15 +26,14 @@ This repository containts a SystemVerilog implementation of a parametrized Round
 
 ## Testbench
 In the following testbenches the following variables were randomized:
-
-1. enable signal - Updating the priority vector is carried only when the enable signal is logic high at the capturing clock edge (rising).
-2. request vector - N-bit request vector is generated and supplied to both the arbiter module as well as the verification logic.
+1. enable signal - Arbitration is carried only when the enable signal is logic high at the capturing clock edge (rising).
+2. request vector - N-bit request vector is generated and routed to both the arbiter module as well as the verification logic.
 
 ### Conventional rotating scheme (N=8)
 
 ![simplified_sim](./docs/simplified_sim.jpg) 
-	
-As can be seen,	when the enable signal is logic high at the rising edge of the clock a new request vector is generated and the priority pointer is modified. Since this is a standard circular realization, the 'priority' vector (marked in red) changes in a circular manner. 
+
+As can be seen,	when the enable signal is logic high at the rising edge of the clock a new request vector is generated and arbitration is carried. Since this is a standard circular realization, the 'priority' vector (marked in red) changes in a circular manner. 
 
 ![simplified_sim_zoom](./docs/simplified_sim_zoom.jpg) 
 
