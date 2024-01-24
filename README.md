@@ -20,7 +20,7 @@ This repository containts a SystemVerilog implementation of a parametrized Round
 
 ![modified_block](./docs/modified_block.jpg) 
 
-**TYPE=2 :**Weighted rotating scheme. Winning requested is chosen based on both the instantaneous weights status and the pointer location.
+**TYPE=2 :** Weighted rotating scheme. Winning requested is chosen based on both the instantaneous weights status and the pointer location.
 
 ![M_Fig_3](./docs/M_Fig_3.jpg) 
 
