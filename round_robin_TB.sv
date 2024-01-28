@@ -32,8 +32,8 @@ round_robin #(.N(N), .W(W), .TYPE(TYPE)) rr_tst(
                    .i_rstn(rstn),
                    .i_en(en_rand),
                    .i_req(req),
-				   .i_load(load_weights),
-				   .i_weights(weights),
+                   .i_load(load_weights),
+                   .i_weights(weights),
                    .o_gnt(gnt)
 );
 
@@ -64,44 +64,44 @@ for(int k=0; k<50; k++) begin
     req= $dist_uniform(SEED,0,2**N-1);                                                                 //Randomize the N-bit long requesting vector
     $display("Randomized request vector is %b", req);
   
-	@(posedge clk)
+  @(posedge clk)
 
     gnt_ver='0;
     ptr_tmp=ptr_ver;
-	
+
     //Calculating the grant vector for comparison with the round_robin module 'gnt' signal	
     if (req[ptr_ver]==1'b1)
       gnt_ver[ptr_ver]=1'b1;
     else begin
       for (int i=ptr_ver-1; i>=0; i--)
-	    if (req[i]==1'b1)
-	      ptr_tmp=i;  
+        if (req[i]==1'b1)
+          ptr_tmp=i;  
   
       for (int i=N-1; i>ptr_ver; i--)
-	    if (req[i]==1'b1)
-	      ptr_tmp=i;
-		
-	  gnt_ver[ptr_tmp] = req[ptr_tmp];		
+        if (req[i]==1'b1)
+          ptr_tmp=i;
+
+    gnt_ver[ptr_tmp] = req[ptr_tmp];		
     end
 
     if (ptr_ver==N-1)
-	  ptr_ver='0;
-	else
+      ptr_ver='0;
+    else
       ptr_ver=ptr_ver+$bits(ptr_ver)'(1);                                                              //In conventional RR the pointer is increased by one in a cyclic manner regardless of the arbitration result
-    
-	en_rand= $dist_uniform(SEED,0,1);
-	
+
+    en_rand= $dist_uniform(SEED,0,1);
+
     @(negedge clk)
     if (gnt==gnt_ver)                                                                                  //Comparing the two grant vectors
       $display("Grant vector is %b. Verification grant vector is %b. SUCCESS!\n", gnt, gnt_ver);
     else begin
       $display("Grant vector is %b. Verification grant vector is %b. FAILURE!\n", gnt, gnt_ver);
-	  $finish;
+      $finish;
     end
 
   end
   else  begin                                                                                          //Do not execute arbitration if the enable signal is logic low
-	@(posedge clk);
+    @(posedge clk);
     en_rand= $dist_uniform(SEED,0,1);	
   end
 end
@@ -119,7 +119,7 @@ for(int k=0; k<400; k++) begin
     req=$dist_uniform(SEED,0,2**N-1);                                                                  //Randomize the N-bit long requesting vector
     $display("Randomized request vector is %b", en_rand);
 
-	@(posedge clk);	
+    @(posedge clk);	
 
     gnt_ver='0;
     ptr_tmp=ptr_ver;
@@ -129,39 +129,38 @@ for(int k=0; k<400; k++) begin
       gnt_ver[ptr_ver]=1'b1;
     else begin
       for (int i=ptr_ver-1; i>=0; i--)
-	    if (req[i]==1'b1)
-	      ptr_tmp=i;  
+        if (req[i]==1'b1)
+          ptr_tmp=i;  
   
       for (int i=N-1; i>ptr_ver; i--)
-	    if (req[i]==1'b1)
-	      ptr_tmp=i;
-		
-	  gnt_ver[ptr_tmp] = req[ptr_tmp];	
+        if (req[i]==1'b1)
+          ptr_tmp=i;
+
+    gnt_ver[ptr_tmp] = req[ptr_tmp];
     end
     
     for (int i=0; i<N; i++)
-	  if (gnt_ver[i])
-	    ptr_ver=i;	
+      if (gnt_ver[i])
+        ptr_ver=i;
 
     if (ptr_ver==N-1)
-	  ptr_ver='0;
-	else
+      ptr_ver='0;
+    else
       ptr_ver=ptr_ver+$bits(ptr_ver)'(1);                                                              //In the modified RR the pointer is a function of the winning requester
 
-	en_rand= $dist_uniform(SEED,0,1);
-    	
-	@(negedge clk)
+    en_rand= $dist_uniform(SEED,0,1);
+
+    @(negedge clk)
     if (gnt==gnt_ver)                                                                                  //Comparing the two grant vectors
       $display("Grant vector is %b. Verification grant vector is %b. SUCCESS!\n", gnt, gnt_ver);
     else begin
       $display("Grant vector is %b. Verification grant vector is %b. FAILURE!\n", gnt, gnt_ver);
-	  $finish;
+      $finish;
     end
 
-	//en_rand= $dist_uniform(SEED,0,1);
   end
   else begin                                                                                           //Do not execute arbitration if the enable signal is logic low
-	@(posedge clk);
+    @(posedge clk);
     en_rand=$dist_uniform(SEED,0,1);
   end
 end
@@ -176,84 +175,84 @@ $display("Initiate test - weighted Round Robin arbiter \n");
 
 for (int k=0; k<100; k++) begin	 
 
-    if ($dist_uniform(SEED,0,6)==2) begin                                                              //Loading new weight status. Modify the distribution to change the update frequency.
-	  for (int i=0; i<N; i++)                                                                          //Randomize weight vectors. Weight values span from 0 (lowest priority) to 2**W-1 (highest priority)
-        weights[i]=$dist_uniform(SEED,0,2**W-1);
-	  load_weights=1'b1;                                                                               //Generating a pulse shaped load signal.
-    end
-	else if (load_weights==1'b1)
-	  load_weights=1'b0;
-	
-    if (en_rand==1'b1) begin
-      req=$dist_uniform(SEED,0,2**N-1);                                                                //Randomize the N-bit long requesting vector
-      $display("Randomized request vector is %b", req);
-     
-	  @(posedge clk)
-	  
-      //Calculating the grant vector for comparison with the round_robin module 'gnt' signal
-	  gnt_ver='0;
-      ptr_tmp=ptr_ver;
-	  
-	  //Masking
-      for (int i=0; i<N; i++)
-        if (req[i]==1'b1)
-	      masked_mim[i]=weights_mim[i];
-	    else
-          masked_mim[i]='0;	
+  if ($dist_uniform(SEED,0,6)==2) begin                                                                //Loading new weight status. Modify the distribution to change the update frequency.
+    for (int i=0; i<N; i++)                                                                            //Randomize weight vectors. Weight values span from 0 (lowest priority) to 2**W-1 (highest priority)
+      weights[i]=$dist_uniform(SEED,0,2**W-1);
+    load_weights=1'b1;                                                                                 //Generating a pulse shaped load signal.
+  end
+  else if (load_weights==1'b1)
+    load_weights=1'b0;
 
-      //Weighted request logic and Internal request vector generation
-      max_mim=0;
-      for (int i=0; i<N; i++)
-        if (masked_mim[i]>max_mim)
-	      max_mim=masked_mim[i];
+  if (en_rand==1'b1) begin
+    req=$dist_uniform(SEED,0,2**N-1);                                                                  //Randomize the N-bit long requesting vector
+    $display("Randomized request vector is %b", req);
 
-      req_w_mim='0;
-      for (int i=0; i<N; i++)
-        if ((masked_mim[i]==max_mim)&&(req[i]==1'b1))
-	      req_w_mim[i]=1'b1;
-	    else 
-	      req_w_mim[i]=1'b0;
-	   
-      if (req_w_mim[ptr_ver]==1'b1)
-        gnt_ver[ptr_ver]=1'b1;
-      else begin
-        for (int i=ptr_ver-1; i>=0; i--)
-	      if (req_w_mim[i]==1'b1)
-	        ptr_tmp=i;  
+    @(posedge clk)
+
+    //Calculating the grant vector for comparison with the round_robin module 'gnt' signal
+    gnt_ver='0;
+    ptr_tmp=ptr_ver;
+
+    //Masking
+    for (int i=0; i<N; i++)
+      if (req[i]==1'b1)
+        masked_mim[i]=weights_mim[i];
+      else
+        masked_mim[i]='0;	
+
+    //Weighted request logic and Internal request vector generation
+    max_mim=0;
+    for (int i=0; i<N; i++)
+      if (masked_mim[i]>max_mim)
+        max_mim=masked_mim[i];
+
+    req_w_mim='0;
+    for (int i=0; i<N; i++)
+      if ((masked_mim[i]==max_mim)&&(req[i]==1'b1))
+        req_w_mim[i]=1'b1;
+      else 
+        req_w_mim[i]=1'b0;
+
+    if (req_w_mim[ptr_ver]==1'b1)
+      gnt_ver[ptr_ver]=1'b1;
+    else begin
+      for (int i=ptr_ver-1; i>=0; i--)
+        if (req_w_mim[i]==1'b1)
+          ptr_tmp=i;  
   
-      for (int i=N-1; i>ptr_ver; i--)
-	    if (req_w_mim[i]==1'b1)
-	      ptr_tmp=i;
-		
-	  gnt_ver[ptr_tmp] = 1'b1;		
-      end	
+    for (int i=N-1; i>ptr_ver; i--)
+      if (req_w_mim[i]==1'b1)
+        ptr_tmp=i;
 
-      if (ptr_tmp==N-1)
-	    ptr_ver='0;
-	  else
-        ptr_ver=ptr_tmp+$bits(ptr_tmp)'(1);
-	   
-	  if (load_weights==1'b1)
-	    weights_mim=weights;
-      else if ((en_rand==1'b1)&&(|gnt_ver)&&(weights_mim[ptr_tmp]>0))	
-	    weights_mim[ptr_tmp]=weights_mim[ptr_tmp]-1;
-	 
-	  en_rand= $dist_uniform(SEED,0,1);	  	  
+    gnt_ver[ptr_tmp] = 1'b1;
+      end
 
-	  //Compare to verification 	
-	  @(negedge clk) 
-      if (gnt==gnt_ver)                                                                                  //Comparing the two grant vectors
+    if (ptr_tmp==N-1)
+      ptr_ver='0;
+    else
+      ptr_ver=ptr_tmp+$bits(ptr_tmp)'(1);
+
+    if (load_weights==1'b1)
+      weights_mim=weights;
+    else if ((en_rand==1'b1)&&(|gnt_ver)&&(weights_mim[ptr_tmp]>0))
+      weights_mim[ptr_tmp]=weights_mim[ptr_tmp]-1;
+
+    en_rand= $dist_uniform(SEED,0,1);
+
+    //Compare to verification
+    @(negedge clk) 
+    if (gnt==gnt_ver)                                                                                  //Comparing the two grant vectors
         $display("Grant vector is %b. Verification grant vector is %b. SUCCESS!\n", gnt, gnt_ver);
-      else begin
-        $display("Grant vector is %b. Verification grant vector is %b. FAILURE at time %t!\n", gnt, gnt_ver, $realtime);
-	    $finish;
-      end	 
+    else begin
+      $display("Grant vector is %b. Verification grant vector is %b. FAILURE at time %t!\n", gnt, gnt_ver, $realtime);
+      $finish;
+      end
     end
     else begin                                                                                         //Do not execute arbitration if the enable signal is logic low
-	  @(posedge clk);
-	  if (load_weights==1'b1)
-	    weights_mim=weights;
-	  en_rand= $dist_uniform(SEED,0,1);	  	  
+      @(posedge clk);
+      if (load_weights==1'b1)
+        weights_mim=weights;
+      en_rand= $dist_uniform(SEED,0,1);	  	  
     end
   
 end

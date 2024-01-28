@@ -35,7 +35,9 @@ logic [W-1:0] max;                                 //Holds the maximal weight be
 
 //HDL body
 generate
-if (TYPE==0) begin                                 //Simplified rotating scheme
+
+//------Conventional RR arbitration---//
+if (TYPE==0) begin
 //Rotate right
 assign {tmp_r,rotate_r} = {2{i_req}}>>ptr;
 
@@ -48,19 +50,20 @@ assign {gnt,tmp_l} = {2{priority_out}}<<ptr;
 always @(posedge i_clk or negedge i_rstn)
   if (!i_rstn) begin
     ptr<='0;
-	o_gnt<='0;                        
-	end
+  o_gnt<='0;                        
+  end
   else if (i_en) begin
     if (ptr==N-1)
-	  ptr<='0;
-	else
+    ptr<='0;
+  else
     ptr<=ptr+$bits(ptr)'(1);
-	
-	o_gnt<=gnt;
+
+  o_gnt<=gnt;
   end
 end
 
-else if (TYPE==1) begin                            //Modified rotating scheme
+//------Modified RR arbitration-------//
+else if (TYPE==1) begin
 //Rotate right
 assign {tmp_r,rotate_r} = {2{i_req}}>>ptr;
 
@@ -81,24 +84,25 @@ end
 always @(posedge i_clk or negedge i_rstn)
   if (!i_rstn) begin
     ptr<='0;
-	o_gnt<='0;
+  o_gnt<='0;
   end
   else if (i_en) begin
     if (ptr_arb==N-1)
-	  ptr<='0;
-	else
+      ptr<='0;
+    else
       ptr<=ptr_arb+$bits(ptr)'(1);
-	o_gnt<=gnt;
+  o_gnt<=gnt;
   end
 end
 
-else if (TYPE==2) begin                            //Weighted scheme
+//------Weighted RR arbitration-------//
+else if (TYPE==2) begin
 //Masking
 always @(*) begin
   for (int i=0; i<N; i++)
     if (i_req[i]==1'b1)
-	  masked[i]=weight_counters[i];
-	else
+    masked[i]=weight_counters[i];
+  else
       masked[i]='0;	
 end
 
@@ -107,16 +111,16 @@ always @(*) begin
   max=0;
   for (int i=0; i<N; i++)
     if (masked[i]>max)
-	  max=masked[i];
+      max=masked[i];
 end
 
 always @(*) begin
   req_w='0;
   for (int i=0; i<N; i++)
     if ((masked[i]==max)&&(i_req[i]==1'b1))
-	  req_w[i]=1'b1;
-	else 
-	  req_w[i]=1'b0;
+      req_w[i]=1'b1;
+    else 
+      req_w[i]=1'b0;
 end
 
 //Rotate right
@@ -139,8 +143,8 @@ end
 always @(posedge i_clk or negedge i_rstn)
   if (!i_rstn) begin
     ptr<='0;
-	o_gnt<='0;
-	weight_counters<='0;
+    o_gnt<='0;
+    weight_counters<='0;
   end
   else begin  
     if (i_load)                                                   //load has priority
@@ -150,10 +154,10 @@ always @(posedge i_clk or negedge i_rstn)
   
     if (i_en) begin
       if (ptr_arb==N-1)
-	    ptr<='0;
-	  else
+        ptr<='0;
+      else
         ptr<=ptr_arb+$bits(ptr_arb)'(1);
-	  o_gnt<=gnt;
+    o_gnt<=gnt;
     end 
   end 
   

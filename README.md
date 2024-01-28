@@ -91,7 +91,7 @@ Masked vector               : 0-4-0-5-0-0-5-2-5-6 <br>
 Max                         : 6                   <br>
 Internal request vector     : 0-0-0-0-0-0-0-0-0-1 <br>
 
-The internal request vector is then processed by the same logic as in 'modified RR' case to produce the grant vector which is : 0-0-0-0-0-0-1-0-0-0.<br>
+The internal request vector is then processed by the same logic as in 'modified RR' case to produce the grant vector which is : 0-0-0-0-0-0-1-0-0-0.
 After the arbitration event the weight status is updated and the winning requester weight is decreased (requester number 3) from 6-->5.
 
 Please run the testbench and observe the teminal messages for in-depth understanding using the log messages.
