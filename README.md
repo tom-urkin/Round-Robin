@@ -68,8 +68,13 @@ Please run the testbench and observe the teminal messages for in-depth understan
 
 ![weighted_sim](./docs/weighted_sim.jpg) 
 
+As can be seen,	when the enable signal is logic high at the rising edge of the clock a new request vector is generated and arbitration is carried. In this realization, the priority pointer is updated according to the arbitration outcome which considers both the pointer location and the weight vector status (please see the block diagram above). Marked on the timing diagram is a weight vector update event.
+
 ![weighted_sim_zoom](./docs/weighted_sim_zoom.jpg) 
 
+For better understading two arbitration events are discussed here in detail.
+
+**1**
 
 
 ## Support
