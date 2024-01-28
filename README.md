@@ -22,7 +22,7 @@ This repository containts a SystemVerilog implementation of a parametrized Round
 
 **TYPE=2 :** Weighted rotating scheme. Winning requested is chosen based on both the instantaneous weights status and the pointer location.
 
-![M_Fig_3](./docs/M_Fig_3.jpg) 
+![weighted_block](./docs/weighted_block.jpg) 
 
 ## Testbench
 In the following testbenches the following variables were randomized:
@@ -65,7 +65,12 @@ As can be seen,	when the enable signal is logic high at the rising edge of the c
 Please run the testbench and observe the teminal messages for in-depth understanding using the log messages.
 
 ### Weighted rotating scheme
-XXX
+
+![weighted_sim](./docs/weighted_sim.jpg) 
+
+![weighted_sim_zoom](./docs/weighted_sim_zoom.jpg) 
+
+
 
 ## Support
 
