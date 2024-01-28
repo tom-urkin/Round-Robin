@@ -74,17 +74,17 @@ As can be seen,	when the enable signal is logic high at the rising edge of the c
 
 For better understading two arbitration events are discussed here in detail.
 
-**Case '1'**
-Request vector          : 1-1-0-1-0-1-1-0-1-0
-Weight vector           : 2-4-3-5-4-0-6-2-5-7
-Masked vector           : 2-4-0-5-0-0-6-0-5-0
-Max                     : 6
-Internal request vector : 0-0-0-0-0-0-1-0-0-0
+**Case '1'** <br>
+Request vector          : 1-1-0-1-0-1-1-0-1-0 <br>
+Weight vector           : 2-4-3-5-4-0-6-2-5-7 <br>
+Masked vector           : 2-4-0-5-0-0-6-0-5-0 <br>
+Max                     : 6                   <br>
+Internal request vector : 0-0-0-0-0-0-1-0-0-0 <br>
 
 The internal request vector is then processed by the same logic as in 'modified RR' case to produce the grant vector which is : 0-0-0-0-0-0-1-0-0-0.<br>
 After the arbitration event the weight status is updated and the winning requester weight is decreased (requester number 3) from 6-->5.
 
-**Case '2'**
+**Case '2'** <br>
 Request vector          : 0-1-0-1-0-1-1-1-1-1
 Weight vector           : 2-4-3-5-4-0-5-2-5-6
 Masked vector           : 0-4-0-5-0-0-5-2-5-6
